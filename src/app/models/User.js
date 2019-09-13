@@ -25,13 +25,14 @@ class User extends Model {
     return this;
   }
 
+  static associate(models) {
+    this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'avatar' });
+    this.hasMany(models.Post);
+  }
+
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);
   }
 }
-
-User.associate = function (models) {
-  User.hasOne(models.Post);
-};
 
 export default User;

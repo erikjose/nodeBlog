@@ -1,8 +1,25 @@
 import ValidationsUser from '../validators/User';
 import Token from './TokenController';
 import User from '../models/User';
+import File from '../models/File';
 
 class UserController {
+  async index(req, res) {
+    const user = await User.findOne({
+      where: { id: req.params.id },
+      attributes: ['id', 'name', 'lastname', 'email', 'avatar_id'],
+      include: [
+        {
+          model: File,
+          as: 'avatar',
+          attributes: ['name', 'path', 'url'],
+        },
+      ],
+    });
+
+    return res.json(user);
+  }
+
   async store(req, res) {
     ValidationsUser.createUser(req, res);
 

@@ -13,14 +13,10 @@ class Post extends Model {
       },
     );
   }
-}
 
-Post.associate = function (models) {
-  Post.belongsToMany(models.User, {
-    foreignKey: {
-      allowNull: false,
-    },
-  });
-};
+  static associate(models) {
+    this.belongsTo(models.User, { foreignKey: 'user_id', through: 'users', as: 'user' });
+  }
+}
 
 export default Post;
