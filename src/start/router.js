@@ -6,6 +6,7 @@ import UserController from '../app/controllers/UserController';
 import SessionController from '../app/controllers/SessionController';
 import FileController from '../app/controllers/FileController';
 import PostController from '../app/controllers/PostController';
+import CommentController from '../app/controllers/CommentController';
 
 import authMiddleware from '../app/middlewares/auth';
 
@@ -24,6 +25,11 @@ routes.get('/user/:id', UserController.index);
 
 routes.get('/post', PostController.index);
 routes.post('/post', PostController.store);
+routes.put('/post/:id', PostController.update);
+routes.delete('/post/:id', PostController.delete);
+
+routes.post('/post/:id/comment', CommentController.store);
+routes.put('/post/:id/comment/:comment', CommentController.update);
 
 routes.post('/files', upload.single('file'), FileController.store);
 
