@@ -6,8 +6,13 @@ import Comment from '../models/Comment';
 
 class PostController {
   async index(req, res) {
+    const { page = 1 } = req.query;
+
     const posts = await Post.findAll({
-      attributes: ['id', 'title', 'content', 'createdAt', 'updatedAt'],
+      attributes: ['id', 'title', 'content', 'createdAt', 'updatedAt', 'user_id'],
+      order: ['id'],
+      limit: 20,
+      offset: (page - 1) * 20,
       include: [
         {
           model: User,

@@ -2,6 +2,7 @@ import CommentValidations from '../validators/Comment';
 import Comment from '../models/Comment';
 import User from '../models/User';
 import Post from '../models/Post';
+import Notification from '../schemas/Notification';
 
 class CommentController {
   async store(req, res) {
@@ -41,6 +42,16 @@ class CommentController {
           ],
         },
       ],
+    });
+
+    const userPost = await Post.findOne({
+      where: { id: req.params.id },
+    });
+
+    // Notificar o comentário
+    await Notification.create({
+      content: `Sua publicação ${userPost.title} recebeu um novo comentário.`,
+      user: userPost.user_id,
     });
 
     return res.status(200).json(cmt);
