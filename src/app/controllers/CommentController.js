@@ -5,6 +5,29 @@ import Post from '../models/Post';
 import Notification from '../schemas/Notification';
 
 class CommentController {
+  async index(req, res) {
+    const post = await Post.findOne({
+      where: { id: req.params.id },
+      attributes: ['id', 'title', 'content'],
+      include: [
+        {
+          model: Comment,
+          as: 'comments',
+          attributes: ['id', 'content', 'createdAt', 'updatedAt'],
+          include: [
+            {
+              model: User,
+              as: 'user',
+              attributes: ['id', 'name', 'lastname', 'email'],
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json(post);
+  }
+
   async store(req, res) {
     CommentValidations.index(req, res);
 
@@ -76,6 +99,12 @@ class CommentController {
       });
     }
 
+    if (comt.user_id !== req.userId) {
+      return res.status(400).json({
+        error: 'You are not the comment author.',
+      });
+    }
+
     await comt.update(req.body);
 
     const comment = await Comment.findOne({
@@ -107,6 +136,35 @@ class CommentController {
     });
 
     return res.json(comment);
+  }
+
+  async delete(req, res) {
+    const post = await Post.findByPk(req.params.id);
+    const comt = await Comment.findByPk(req.params.comment);
+
+    if (!post) {
+      return res.status(400).json({
+        error: 'Post already exists.',
+      });
+    }
+
+    if (!comt) {
+      return res.status(400).json({
+        error: 'Comment already exists.',
+      });
+    }
+
+    if (comt.user_id !== req.userId) {
+      return res.status(400).json({
+        error: 'You are not the comment author.',
+      });
+    }
+
+    await comt.destroy();
+
+    return res.status(200).json({
+      message: 'Comment has been deleted',
+    });
   }
 }
 

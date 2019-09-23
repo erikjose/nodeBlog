@@ -29,6 +29,7 @@ class User extends Model {
     this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'avatar' });
     this.hasMany(models.Post);
     this.hasMany(models.Comment, { as: 'comments' });
+    this.hasMany(models.Like, { as: 'likes' });
   }
 
   checkPassword(password) {

@@ -17,6 +17,7 @@ class Post extends Model {
   static associate(models) {
     this.belongsTo(models.User, { foreignKey: 'user_id', through: 'users', as: 'user' });
     this.hasMany(models.Comment, { as: 'comments' });
+    this.hasMany(models.Like, { as: 'likes' });
   }
 }
 

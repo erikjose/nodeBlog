@@ -7,6 +7,7 @@ import SessionController from '../app/controllers/SessionController';
 import FileController from '../app/controllers/FileController';
 import PostController from '../app/controllers/PostController';
 import CommentController from '../app/controllers/CommentController';
+import LikeController from '../app/controllers/LikeController';
 import NotificationController from '../app/controllers/NotificationController';
 
 import authMiddleware from '../app/middlewares/auth';
@@ -29,8 +30,13 @@ routes.post('/post', PostController.store);
 routes.put('/post/:id', PostController.update);
 routes.delete('/post/:id', PostController.delete);
 
+routes.get('/post/:id/comment', CommentController.index);
 routes.post('/post/:id/comment', CommentController.store);
 routes.put('/post/:id/comment/:comment', CommentController.update);
+routes.delete('/post/:id/comment/:comment', CommentController.delete);
+
+routes.post('/post/:id/like', LikeController.store);
+routes.delete('/post/:id/like/:like', LikeController.delete);
 
 routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id', NotificationController.update);

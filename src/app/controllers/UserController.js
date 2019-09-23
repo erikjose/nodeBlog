@@ -3,6 +3,9 @@ import Token from './TokenController';
 import User from '../models/User';
 import File from '../models/File';
 
+import NewUser from '../jobs/NewUser';
+import Queue from '../../lib/Queue';
+
 class UserController {
   async index(req, res) {
     const user = await User.findOne({
@@ -38,6 +41,12 @@ class UserController {
     const {
       id, email, name, lastname, createdAt, updatedAt,
     } = await User.create(req.body);
+
+    // Send e-mail new user
+    await Queue.add(NewUser.key, {
+      name,
+      email,
+    });
 
     return res.json({
       id,
