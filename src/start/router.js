@@ -36,7 +36,7 @@ routes.put('/post/:id/comment/:comment', CommentController.update);
 routes.delete('/post/:id/comment/:comment', CommentController.delete);
 
 routes.post('/post/:id/like', LikeController.store);
-routes.delete('/post/:id/like/:like', LikeController.delete);
+routes.delete('/post/:id/like', LikeController.delete);
 
 routes.get('/notifications', NotificationController.index);
 routes.put('/notifications/:id', NotificationController.update);
